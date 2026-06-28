@@ -9,129 +9,81 @@
 html, body {
   height: 100%; background: #000;
   display: flex; align-items: center; justify-content: center;
-  overflow: hidden; font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif; overflow: hidden;
 }
-#scherm {
-  display: flex; flex-direction: column; align-items: center; gap: 28px;
+
+/* --- Wachtwoord scherm --- */
+#login {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 24px;
+}
+#login h2 {
+  color: rgba(255,255,255,0.7);
+  font-size: 16px; font-weight: normal; letter-spacing: 0.5px;
 }
 #ww {
   background: rgba(255,255,255,0.12);
-  border: 2px solid rgba(255,255,255,0.6);
-  border-radius: 12px;
-  color: #fff; font-size: 22px;
-  padding: 14px 24px; text-align: center;
-  width: 220px; outline: none;
-  letter-spacing: 4px;
-  -webkit-tap-highlight-color: transparent;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 14px; color: #fff;
+  font-size: 24px; padding: 16px 28px;
+  text-align: center; width: 240px; outline: none;
+  letter-spacing: 6px; -webkit-tap-highlight-color: transparent;
 }
-#ww::placeholder {
-  letter-spacing: 0; color: rgba(255,255,255,0.4); font-size: 15px;
-}
-#speelKnop {
-  display: none; flex-direction: column; align-items: center;
-  gap: 24px; cursor: pointer;
-  -webkit-tap-highlight-color: transparent; user-select: none;
-}
-.play-cirkel {
-  width: 110px; height: 110px; border-radius: 50%;
-  background: rgba(255,255,255,0.12);
-  border: 3px solid rgba(255,255,255,0.8);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 48px; padding-left: 8px;
-  transition: background 0.15s, transform 0.15s;
-}
-#speelKnop:active .play-cirkel {
-  background: rgba(255,255,255,0.25); transform: scale(0.95);
-}
-.play-label {
-  color: rgba(255,255,255,0.85);
-  font-size: 17px; letter-spacing: 0.3px;
+#ww::placeholder { letter-spacing: 0; color: rgba(255,255,255,0.35); font-size: 15px; }
+
+/* --- Video scherm --- */
+#videoscherm {
+  display: none;
+  position: fixed; inset: 0;
+  background: #000;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 20px;
 }
 #vid {
-  display: none; position: fixed; inset: 0;
   width: 100%; height: 100%;
-  background: #000; object-fit: contain;
+  max-height: 100vh;
+  object-fit: contain;
+  background: #000;
 }
 </style>
 </head>
 <body>
 
-<div id="scherm">
-  <input id="ww" type="password" placeholder="Voer wachtwoord in" autocomplete="off">
-  <div id="speelKnop" onclick="speel()">
-    <div class="play-cirkel">&#9654;</div>
-    <div class="play-label">Klik hier om af te spelen</div>
-  </div>
+<div id="login">
+  <h2>Voer wachtwoord in</h2>
+  <input id="ww" type="password" placeholder="wachtwoord" autocomplete="off"
+         inputmode="text" autofocus>
 </div>
 
-<video id="vid"
-  src="https://res.cloudinary.com/djdvgwvqz/video/upload/v1782650935/Afscheid_Irghin_1_ddrbvf.mp4"
-  playsinline
-  webkit-playsinline
-  preload="metadata">
-</video>
+<div id="videoscherm">
+  <video id="vid"
+    controls
+    playsinline
+    webkit-playsinline
+    preload="metadata"
+    src="https://res.cloudinary.com/djdvgwvqz/video/upload/v1782650935/Afscheid_Irghin_1_ddrbvf.mp4">
+  </video>
+</div>
 
 <script>
-var ww   = document.getElementById('ww');
-var knop = document.getElementById('speelKnop');
-var vid  = document.getElementById('vid');
+var ww          = document.getElementById('ww');
+var login       = document.getElementById('login');
+var videoscherm = document.getElementById('videoscherm');
+var vid         = document.getElementById('vid');
 
-function check() {
-  if (ww.value.trim().toLowerCase() === 'irghin') {
-    ww.style.display   = 'none';
-    knop.style.display = 'flex';
-  }
-}
-ww.addEventListener('input', check);
-ww.addEventListener('keyup', check);
+function onInput() {
+  if (ww.value.trim().toLowerCase() !== 'irghin') return;
 
-function vollScherm() {
-  if (typeof vid.webkitEnterFullscreen === 'function') {
-    vid.webkitEnterFullscreen();
-  } else if (vid.requestFullscreen) {
-    vid.requestFullscreen();
-  } else if (vid.mozRequestFullScreen) {
-    vid.mozRequestFullScreen();
-  } else if (vid.msRequestFullscreen) {
-    vid.msRequestFullscreen();
-  }
+  login.style.display       = 'none';
+  videoscherm.style.display = 'flex';
+
+  // Probeer autoplay — als browser weigert, gebruiker tikt zelf op play-knop
+  try { vid.play(); } catch(e) {}
 }
 
-function herstel() {
-  var fs = document.fullscreenElement || document.webkitFullscreenElement;
-  if (!fs) {
-    vid.pause();
-    vid.currentTime = 0;
-    vid.style.display  = 'none';
-    knop.style.display = 'flex';
-  }
-}
-
-vid.addEventListener('ended', function() {
-  vid.style.display  = 'none';
-  vid.currentTime = 0;
-  knop.style.display = 'flex';
-});
-document.addEventListener('fullscreenchange', herstel);
-document.addEventListener('webkitfullscreenchange', herstel);
-
-function speel() {
-  knop.style.display = 'none';
-  vid.style.display  = 'block';
-  vid.muted = false;
-
-  var p = vid.play();
-  if (p && typeof p.then === 'function') {
-    p.then(function() {
-      vollScherm();
-    }).catch(function() {
-      // play geblokkeerd — toon alsnog video zonder fullscreen
-      vid.style.display = 'block';
-    });
-  } else {
-    vollScherm();
-  }
-}
+ww.addEventListener('input',  onInput);
+ww.addEventListener('keyup',  onInput);
+ww.addEventListener('change', onInput);
 </script>
 </body>
 </html>
