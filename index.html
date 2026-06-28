@@ -9,17 +9,11 @@
 html, body {
   height: 100%; background: #000;
   display: flex; align-items: center; justify-content: center;
-  font-family: Arial, sans-serif; overflow: hidden;
+  font-family: Arial, sans-serif;
 }
-
-/* --- Wachtwoord scherm --- */
-#login {
+#scherm {
   display: flex; flex-direction: column;
-  align-items: center; gap: 24px;
-}
-#login h2 {
-  color: rgba(255,255,255,0.7);
-  font-size: 16px; font-weight: normal; letter-spacing: 0.5px;
+  align-items: center; gap: 28px; padding: 24px;
 }
 #ww {
   background: rgba(255,255,255,0.12);
@@ -30,60 +24,55 @@ html, body {
   letter-spacing: 6px; -webkit-tap-highlight-color: transparent;
 }
 #ww::placeholder { letter-spacing: 0; color: rgba(255,255,255,0.35); font-size: 15px; }
-
-/* --- Video scherm --- */
-#videoscherm {
+#speelLink {
   display: none;
-  position: fixed; inset: 0;
-  background: #000;
-  align-items: center; justify-content: center;
-  flex-direction: column; gap: 20px;
+  flex-direction: column; align-items: center; gap: 20px;
+  text-decoration: none; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-#vid {
-  width: 100%; height: 100%;
-  max-height: 100vh;
-  object-fit: contain;
-  background: #000;
+.play-cirkel {
+  width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 3px solid rgba(255,255,255,0.85);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 52px; padding-left: 10px;
+  transition: background 0.15s, transform 0.15s;
+}
+#speelLink:active .play-cirkel {
+  background: rgba(255,255,255,0.28); transform: scale(0.95);
+}
+.play-label {
+  color: rgba(255,255,255,0.85);
+  font-size: 18px; letter-spacing: 0.3px;
 }
 </style>
 </head>
 <body>
+<div id="scherm">
+  <input id="ww" type="password" placeholder="wachtwoord"
+         autocomplete="off" inputmode="text" autofocus>
 
-<div id="login">
-  <h2>Voer wachtwoord in</h2>
-  <input id="ww" type="password" placeholder="wachtwoord" autocomplete="off"
-         inputmode="text" autofocus>
-</div>
-
-<div id="videoscherm">
-  <video id="vid"
-    controls
-    playsinline
-    webkit-playsinline
-    preload="metadata"
-    src="https://res.cloudinary.com/djdvgwvqz/video/upload/v1782650935/Afscheid_Irghin_1_ddrbvf.mp4">
-  </video>
+  <a id="speelLink"
+     href="https://res.cloudinary.com/djdvgwvqz/video/upload/v1782650935/Afscheid_Irghin_1_ddrbvf.mp4"
+     target="_blank" rel="noopener">
+    <div class="play-cirkel">&#9654;</div>
+    <div class="play-label">Klik hier om af te spelen</div>
+  </a>
 </div>
 
 <script>
-var ww          = document.getElementById('ww');
-var login       = document.getElementById('login');
-var videoscherm = document.getElementById('videoscherm');
-var vid         = document.getElementById('vid');
+var ww   = document.getElementById('ww');
+var link = document.getElementById('speelLink');
 
-function onInput() {
-  if (ww.value.trim().toLowerCase() !== 'irghin') return;
-
-  login.style.display       = 'none';
-  videoscherm.style.display = 'flex';
-
-  // Probeer autoplay — als browser weigert, gebruiker tikt zelf op play-knop
-  try { vid.play(); } catch(e) {}
+function check() {
+  if (ww.value.trim().toLowerCase() === 'irghin') {
+    ww.style.display   = 'none';
+    link.style.display = 'flex';
+  }
 }
-
-ww.addEventListener('input',  onInput);
-ww.addEventListener('keyup',  onInput);
-ww.addEventListener('change', onInput);
+ww.addEventListener('input',  check);
+ww.addEventListener('keyup',  check);
+ww.addEventListener('change', check);
 </script>
 </body>
 </html>
