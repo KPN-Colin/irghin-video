@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Afscheid Irghin</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  height: 100%; background: #000;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; font-family: Arial, sans-serif;
+}
+#scherm {
+  display: flex; flex-direction: column; align-items: center; gap: 28px;
+}
+#ww {
+  background: rgba(255,255,255,0.12);
+  border: 2px solid rgba(255,255,255,0.6);
+  border-radius: 12px;
+  color: #fff; font-size: 22px;
+  padding: 14px 24px; text-align: center;
+  width: 220px; outline: none;
+  letter-spacing: 4px;
+  -webkit-tap-highlight-color: transparent;
+}
+#ww::placeholder {
+  letter-spacing: 0; color: rgba(255,255,255,0.4); font-size: 15px;
+}
+#speelKnop {
+  display: none; flex-direction: column; align-items: center;
+  gap: 24px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent; user-select: none;
+}
+.play-cirkel {
+  width: 110px; height: 110px; border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 3px solid rgba(255,255,255,0.8);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px; padding-left: 8px;
+  transition: background 0.15s, transform 0.15s;
+}
+#speelKnop:active .play-cirkel {
+  background: rgba(255,255,255,0.25); transform: scale(0.95);
+}
+.play-label {
+  color: rgba(255,255,255,0.85);
+  font-size: 17px; letter-spacing: 0.3px;
+}
+#vid {
+  display: none; position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  background: #000; object-fit: contain;
+}
+</style>
+</head>
+<body>
+
+<div id="scherm">
+  <input id="ww" type="password" placeholder="Voer wachtwoord in" autocomplete="off">
+  <div id="speelKnop" onclick="speel()">
+    <div class="play-cirkel">&#9654;</div>
+    <div class="play-label">Klik hier om af te spelen</div>
+  </div>
+</div>
+
+<video id="vid"
+  src="https://res.cloudinary.com/djdvgwvqz/video/upload/v1782650935/Afscheid_Irghin_1_ddrbvf.mp4"
+  playsinline preload="none">
+</video>
+
+<script>
+var ww   = document.getElementById('ww');
+var knop = document.getElementById('speelKnop');
+
+function check() {
+  if (ww.value.trim().toLowerCase() === 'irghin') {
+    ww.style.display   = 'none';
+    knop.style.display = 'flex';
+  }
+}
+ww.addEventListener('input', check);
+ww.addEventListener('keyup', check);
+
+function speel() {
+  var vid = document.getElementById('vid');
+  knop.style.display = 'none';
+  vid.style.display  = 'block';
+  vid.muted = false;
+  vid.play();
+
+  if (typeof vid.webkitEnterFullscreen === 'function') {
+    vid.webkitEnterFullscreen();
+  } else if (vid.requestFullscreen) {
+    vid.requestFullscreen();
+  } else if (vid.mozRequestFullScreen) {
+    vid.mozRequestFullScreen();
+  } else if (vid.msRequestFullscreen) {
+    vid.msRequestFullscreen();
+  }
+
+  function herstel() {
+    var fs = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!fs) {
+      vid.pause();
+      vid.style.display  = 'none';
+      knop.style.display = 'flex';
+    }
+  }
+  document.addEventListener('fullscreenchange', herstel);
+  document.addEventListener('webkitfullscreenchange', herstel);
+  vid.addEventListener('ended', function() {
+    vid.style.display  = 'none';
+    knop.style.display = 'flex';
+  });
+}
+</script>
+</body>
+</html>
