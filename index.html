@@ -2,101 +2,12 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="refresh" content="0;url=https://res.cloudinary.com/djdvgwvqz/video/upload/v1782650935/Afscheid_Irghin_1_ddrbvf.mp4">
 <title>Afscheid Irghin</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body {
-  height: 100%; background: #000;
-  display: flex; align-items: center; justify-content: center;
-  font-family: Arial, sans-serif; overflow: hidden;
-}
-#knop {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 24px; cursor: pointer; user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.cirkel {
-  width: 120px; height: 120px; border-radius: 50%;
-  background: rgba(255,255,255,0.12);
-  border: 3px solid rgba(255,255,255,0.85);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 52px; padding-left: 10px;
-  transition: background 0.15s, transform 0.15s;
-}
-#knop:active .cirkel { background: rgba(255,255,255,0.28); transform: scale(0.95); }
-.label { color: rgba(255,255,255,0.85); font-size: 18px; letter-spacing: 0.3px; }
-
-#vid {
-  display: none;
-  position: fixed; inset: 0;
-  width: 100%; height: 100%;
-  background: #000; object-fit: contain;
-}
-</style>
 </head>
 <body>
-
-<div id="knop" onclick="speel()">
-  <div class="cirkel">&#9654;</div>
-  <div class="label">Klik hier om af te spelen</div>
-</div>
-
-<!-- fl_progressive: moov-atom vooraan → directe streaming -->
-<!-- geen playsinline: iOS Safari gaat automatisch fullscreen -->
-<video id="vid"
-  preload="metadata"
-  src="https://res.cloudinary.com/djdvgwvqz/video/upload/fl_progressive/v1782650935/Afscheid_Irghin_1_ddrbvf.mp4">
-</video>
-
 <script>
-var knop = document.getElementById('knop');
-var vid  = document.getElementById('vid');
-
-vid.addEventListener('playing', function() {
-  // iOS fullscreen via webkitEnterFullscreen (na play)
-  if (typeof vid.webkitEnterFullscreen === 'function') {
-    vid.webkitEnterFullscreen();
-  }
-});
-
-vid.addEventListener('ended', function() {
-  vid.style.display  = 'none';
-  knop.style.display = 'flex';
-});
-
-document.addEventListener('fullscreenchange', herstel);
-document.addEventListener('webkitfullscreenchange', herstel);
-
-function herstel() {
-  var fs = document.fullscreenElement || document.webkitFullscreenElement;
-  if (!fs) {
-    vid.pause();
-    vid.style.display  = 'none';
-    knop.style.display = 'flex';
-  }
-}
-
-function speel() {
-  knop.style.display = 'none';
-  vid.style.display  = 'block';
-  vid.muted = false;
-
-  var p = vid.play();
-  if (p && typeof p.then === 'function') {
-    p.then(function() {
-      // Android / desktop fullscreen
-      if (typeof vid.webkitEnterFullscreen !== 'function') {
-        if (vid.requestFullscreen) vid.requestFullscreen();
-        else if (vid.mozRequestFullScreen) vid.mozRequestFullScreen();
-        else if (vid.msRequestFullscreen) vid.msRequestFullscreen();
-      }
-    }).catch(function() {
-      // play geblokkeerd — toon video met native controls als fallback
-      vid.setAttribute('controls', '');
-    });
-  }
-}
+window.location.replace('https://res.cloudinary.com/djdvgwvqz/video/upload/v1782650935/Afscheid_Irghin_1_ddrbvf.mp4');
 </script>
 </body>
 </html>
